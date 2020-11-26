@@ -5,17 +5,21 @@ import "./App.css";
 
 function App() {
   const [images, setImages] = useState([]);
+
   useEffect(() => {
     fetchImages();
   }, []);
+
   async function onChange(e) {
     /* When a file is uploaded, create a unique name and save it using
 the Storage API */
     const file = e.target.files[0];
     const filetype = file.name.split(".")[file.name.split.length - 1];
     await Storage.put(`${uuid()}.${filetype}`, file);
-    /* Once the file is uploaded, fetch the list of images */ fetchImages();
+    /* Once the file is uploaded, fetch the list of images */
+    fetchImages();
   }
+
   async function fetchImages() {
     /* This function fetches the list of image keys from your S3 bucket */
     const files = await Storage.list("");
@@ -31,16 +35,17 @@ for them to be displayed */
     );
     setImages(signedFiles);
   }
+
   return (
     <div className="App">
       <header className="App-header">
-        {" "}
         <input type="file" onChange={onChange} />
         {images.map((image) => (
           <img src={image} key={image} style={{ width: 500 }} />
-        ))}{" "}
+        ))}
       </header>
     </div>
   );
 }
+
 export default App;
